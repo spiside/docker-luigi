@@ -30,6 +30,7 @@ Before starting the cluster you will need to install docker
 (docker-engine >= 0.10.0) and docker-compose. If you already have these
 installed, you can skip to [Getting Started](#getting-started).
 
+Luigi is set to version 2.4.0 using Python 3.5.2.
 
 ### Setting up Docker
 
@@ -142,7 +143,7 @@ recognized by the luigi config parser! Always double check the values in the
 [documentation](http://luigi.readthedocs.io/en/stable/configuration.html).
 
 
-### Cluster Ops
+## Cluster Ops
 
 ```
 ./luigi up
@@ -159,7 +160,7 @@ Stops the cluster then removes the stopped containers.
 ```
 Stop the cluster.
 
-### Debugging
+## Debugging
 
 Displays the cluster logs.
 ```

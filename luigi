@@ -1,0 +1,90 @@
+#!/bin/bash
+
+cmd=${1:-help}
+script=$(basename "$0")
+
+if [[ "$cmd" == "help" ]]
+then
+    cat <<EOF
+$script - A helpful CLI for wrapping luigi development.
+    setup
+        Starts up the entire backend system and preps the user for development.
+
+    shell <container_id:optional>
+        Runs a worker container and drops you in a shell. If a container id
+        is specified, runs bash in the supplied container.
+
+    start <servicename>
+        Starts the docker-compose service.
+
+    up/down
+        Starts/stops the broker and database using docker-compose.
+
+    rebuild
+        Rebuilds the worker container. Useful when making changes to the Dockerile.
+
+    logs <postional arguments>
+        Runs \`docker-compose logs\`.
+
+EOF
+    exit
+fi
+
+docker_compose() {
+    docker-compose -p luigi "$@"
+}
+
+
+case "$cmd" in
+    setup)
+        set -e
+        echo "Setting up the luigi development environment"
+		echo "Checking for Docker installation."
+        if [ -z "$(command -v docker)" ]; then
+            echo "Please install Docker to continue"
+            echo "https://docs.docker.com/engine/installation/"
+            exit 1
+        fi
+		echo "Docker is installed!"
+
+		echo "Setting up the containers..."
+        docker_compose up -d --force-recreate
+        echo "Containers are running"
+        echo "All done!"
+        echo "You should be able to start hacking away now 👻"
+        ;;
+
+    shell)
+        shift
+        if [ -n "$1" ]; then
+            docker exec -it "$1" bash
+            exit 0
+        fi
+
+        echo -e """
+        Dropping you into a development environment.
+        You can run your luigi worker commands here.
+        """
+        docker_compose run -e RUN_TYPE=dev worker
+        echo "Bye bye ✌️"
+        ;;
+
+    up)
+        set -e
+        docker_compose up -d
+        echo -e "\nContainers up and running"
+        echo -e "Scheduler running on \033[1;32mhttp://localhost:8082\033[0;m"
+        set +e
+        ;;
+
+    rebuild)
+		docker_compose build
+        ;;
+
+    restart|stop|down|logs|start|rm)
+        docker_compose "$@"
+        ;;
+
+    *)
+        echo -e "\n$cmd not found. Enter './$script help' for a list of commands"
+esac

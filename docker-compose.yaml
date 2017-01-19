@@ -1,0 +1,33 @@
+version: '2'
+services:
+  scheduler:
+    image:
+      luigi:latest
+    ports:
+      - "8082:8082"
+    environment:
+      LUIGI_TASK_HISTORY_DB_CONNECTION: postgres://luigi@db/dev
+      LUIGI_SCHEDULER_RECORD_TASK_HISTORY: "true"
+    depends_on:
+      - db
+    entrypoint:
+      - ./wait-for-postgres.sh
+      - db
+  worker:
+    build:
+      dockerfile: docker/Dockerfile.worker
+      context: .
+    hostname: worker
+    volumes:
+      - .:/luigi
+    environment:
+      LUIGI_CORE_DEFAULT-SCHEDULER-URL: http://scheduler:8082
+    depends_on:
+      - scheduler
+  db:
+    image: postgres:9.5.4
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: luigi
+      POSTGRES_DB: dev

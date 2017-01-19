@@ -1,0 +1,14 @@
+# Luigi worker crontab
+#
+#   The following environment variables are injected into this
+#   crontab when building the Dockerfile.worker image. The PYTHONPATH
+#   will also be set as the following:
+#   
+#   PYTHONPATH=/luigi
+#
+#   Where /luigi is the path to this project in the docker container.
+#
+# An example of a luigi worker command:
+#
+#   * * 0 1,3,4 * luigi python -m src.tasks.example_task ExampleTask --workers 4
+

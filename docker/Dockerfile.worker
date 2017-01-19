@@ -1,4 +1,4 @@
-FROM luigi:latest
+FROM spiside/luigi:latest
 
 # This is the worker Dockerfile that you can use to install worker
 # specific packages. Some common ones that I've seen are numpy, scipy,

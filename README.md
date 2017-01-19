@@ -1,6 +1,25 @@
 # Luigi with Docker
 
 ```
+______██████████████
+-____██▓▓▓▓▓▓▓▓▓ L ▓████
+-__██▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██
+-__██████░░░░██░░██████
+██░░░░████░░██░░░░░░░░██
+██░░░░████░░░░██░░░░░░██
+-__████░░░░░░██████████
+-__██░░░░░░░░░░░░░██
+_____██░░░░░░░░░██
+-______██░░░░░░██
+-____██▓▓████▓▓▓█
+-_██▓▓▓▓▓▓████▓▓█
+██▓▓▓▓▓▓███░░███░
+-__██░░░░░░███████
+-____██░░░░███████
+-______██████████
+-_____██▓▓▓▓▓▓▓▓▓██
+-_____█████████████
+
 A tool for creating a Luigi docker development and production environment with a single
 scheduler and workers. 
 ```
@@ -38,7 +57,7 @@ docker ps --filter "name=luigi"
 There should be three containers running where the names will be prefixed with
 `luigi_`.
 
-At this point, try navigating to `http:localhost:8082` in your browser. If
+At this point, try navigating to `http://localhost:8082` in your browser. If
 the scheduler is up you should be able to see the luigi visualizer. This
 is a handy web ui that helps you see what tasks are pending, running, failed,
 etc.
@@ -65,14 +84,14 @@ run 10 tasks that will sleep for 0 to 9 seconds and then write a file to
 a local `tmp/` directory.
 
 First, make sure you are watching the visualizer in your browser
-(go to `http:localhost:8082`). Then, let's run the following in the luigi
+(go to `http://localhost:8082`). Then, let's run the following in the luigi
 shell:
 
 ```
 luigi@worker/luigi$ python -m src.tasks.example RunAllTasks
 ```
 
-You should see a bunch of messages where tasks are checking if completed and then
+You should see a bunch of messages where tasks are being checked `completed` and then
 being set to `pending`. Now, take a look at the visualizer and open the graph
 for `RunAllTasks`. You should see a screen similar to the following:
 
@@ -85,13 +104,13 @@ and their status. Once all the tasks are green, check out the `tmp/` directory
 luigi@worker/luigi$ ls tmp/
 ```
 
-You should see 11 .txt files which are finished output of each task!
+You should see 11 .txt files which are the finished output of each task!
 
 
 ### Luigi Config File
 
 The docker container contains a python script `/generate_config.py` that will
-generate a luigi config from environment variables. The config file
+generate a luigi config file from environment variables. The config file
 will be generated and set to the path given by the env `LUIGI_CONFIG_PATH`
 (defaults to `/etc/luigi/luigi.cfg`).
 
@@ -125,20 +144,20 @@ recognized by the luigi config parser! Always double check the values in the
 
 ### Cluster Ops
 
-Starts up the cluster with a default single scheduler, worker, and postgres instance.
 ```
 ./luigi up
 ```
+Starts up the cluster with a default single scheduler, worker, and postgres instance.
 
-Stops the cluster then removes the stopped containers.
 ```
 ./luigi down
 ```
+Stops the cluster then removes the stopped containers.
 
-Stop the cluster.
 ```
 ./luigi stop
 ```
+Stop the cluster.
 
 ### Debugging
 

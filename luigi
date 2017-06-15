@@ -39,15 +39,15 @@ case "$cmd" in
     setup)
         set -e
         echo "Setting up the luigi development environment"
-		echo "Checking for Docker installation."
+        echo "Checking for Docker installation."
         if [ -z "$(command -v docker)" ]; then
             echo "Please install Docker to continue"
             echo "https://docs.docker.com/engine/installation/"
             exit 1
         fi
-		echo "Docker is installed!"
+        echo "Docker is installed!"
 
-		echo "Setting up the containers..."
+        echo "Setting up the containers..."
         docker_compose up -d --force-recreate
         echo "Containers are running"
         echo "All done!"
@@ -78,7 +78,7 @@ case "$cmd" in
         ;;
 
     rebuild)
-		docker_compose build
+      docker_compose build
         ;;
 
     restart|stop|down|logs|start|rm)

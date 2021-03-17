@@ -4,6 +4,8 @@ networks:
 
 services:
   scheduler:
+    build:
+      context: docker/base
     image: spiside/luigi:latest
     ports:
       - "8082:8082"

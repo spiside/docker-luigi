@@ -1,6 +1,11 @@
 version: '2'
+networks:
+  luigi-net:
+
 services:
   scheduler:
+    build:
+      context: docker/base
     image: spiside/luigi:latest
     ports:
       - "8082:8082"
@@ -12,6 +17,9 @@ services:
     entrypoint:
       - ./wait-for-postgres.sh
       - db
+    networks:
+      luigi-net:
+
   worker:
     build:
       dockerfile: docker/Dockerfile.worker
@@ -23,10 +31,15 @@ services:
       LUIGI_CORE_DEFAULT-SCHEDULER-URL: http://scheduler:8082
     depends_on:
       - scheduler
+    networks:
+      luigi-net:
+
   db:
-    image: postgres:9.5.4
-    ports:
-      - "5433:5432"
+    image: postgres:12.4
     environment:
       POSTGRES_USER: luigi
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: dev
+    networks:
+      luigi-net:
